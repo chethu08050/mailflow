@@ -27,6 +27,11 @@ module.exports = async (req, res) => {
     return res.status(400).json({ error: 'Invalid JSON in request body' });
   }
   
+  // Handle Vercel-specific environment
+  if (!body) {
+    return res.status(400).json({ error: 'Request body is required' });
+  }
+  
   try {
     const { gmailUser, appPassword, csvData } = body;
     
