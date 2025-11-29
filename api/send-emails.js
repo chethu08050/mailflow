@@ -15,8 +15,20 @@ module.exports = async (req, res) => {
     return res.status(405).json({ error: 'Method not allowed' });
   }
   
+  // Parse body if it's not already parsed
+  let body;
   try {
-    const { gmailUser, appPassword, csvData } = req.body;
+    if (typeof req.body === 'string') {
+      body = JSON.parse(req.body);
+    } else {
+      body = req.body;
+    }
+  } catch (parseError) {
+    return res.status(400).json({ error: 'Invalid JSON in request body' });
+  }
+  
+  try {
+    const { gmailUser, appPassword, csvData } = body;
     
     // Validate inputs
     if (!gmailUser || !appPassword || !csvData) {
